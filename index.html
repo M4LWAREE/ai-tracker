@@ -8,6 +8,27 @@
   <meta name="apple-mobile-web-app-title" content="Calorie Tracker" />
   <meta name="theme-color" content="#0b0f17" />
   <title>Calorie Tracker</title>
+  <script>
+    // Self-update: on open / foreground, check the live build and reload if newer.
+    // Uses a cache-busting query so iOS/GitHub CDN can't serve a stale answer.
+    const BUILD = "2";
+    async function checkUpdate() {
+      try {
+        const res = await fetch('version.txt?cb=' + Date.now(), { cache: 'no-store' });
+        if (!res.ok) return;
+        const latest = (await res.text()).trim();
+        if (latest && latest !== BUILD) {
+          // Reload to a new URL so the cached HTML is bypassed entirely.
+          location.replace('./?v=' + encodeURIComponent(latest));
+        }
+      } catch (e) { /* offline: keep showing current version */ }
+    }
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') checkUpdate();
+    });
+    window.addEventListener('pageshow', checkUpdate);
+    checkUpdate();
+  </script>
   <style>
     :root {
       --bg: #0b0f17;
