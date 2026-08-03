@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Calorie Tracker" />
+  <meta name="theme-color" content="#0b0f17" />
+  <title>Calorie Tracker</title>
+  <style>
+    :root {
+      --bg: #0b0f17;
+      --card: #131a26;
+      --line: #223049;
+      --text: #eaf0fb;
+      --muted: #8ea1c0;
+      --accent: #4ade80;
+    }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body { margin: 0; height: 100%; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      padding: env(safe-area-inset-top) 20px env(safe-area-inset-bottom);
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+    }
+    header { padding-top: 28px; }
+    .eyebrow { color: var(--muted); font-size: 13px; letter-spacing: .12em; text-transform: uppercase; margin: 0; }
+    h1 { font-size: 30px; margin: 6px 0 0; letter-spacing: -.02em; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 22px;
+      margin-top: 22px;
+    }
+    .big { font-size: 48px; font-weight: 700; letter-spacing: -.03em; }
+    .big small { font-size: 18px; color: var(--muted); font-weight: 500; }
+    .row { display: flex; justify-content: space-between; align-items: baseline; }
+    .muted { color: var(--muted); }
+    .pill {
+      display: inline-block;
+      background: rgba(74,222,128,.12);
+      color: var(--accent);
+      border: 1px solid rgba(74,222,128,.35);
+      border-radius: 999px;
+      padding: 4px 12px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    footer { margin-top: auto; padding: 24px 0; color: var(--muted); font-size: 13px; text-align: center; }
+    footer code { color: var(--text); background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: 2px 7px; }
+  </style>
+</head>
+<body>
+  <header>
+    <p class="eyebrow">AI Tracker</p>
+    <h1>Calorie Tracker</h1>
+  </header>
+
+  <div class="card">
+    <div class="row">
+      <span class="muted">Today</span>
+      <span class="pill" id="build">v0.1</span>
+    </div>
+    <div class="big" style="margin-top:10px;">0 <small>/ 2000 kcal</small></div>
+    <p class="muted" style="margin:14px 0 0;">This is the starting shell. Logging comes next &mdash; step by step.</p>
+  </div>
+
+  <div class="card">
+    <p style="margin:0 0 6px; font-weight:600;">Update test</p>
+    <p class="muted" style="margin:0;">
+      When Claude changes this page and pushes it, the version pill and the line below will change &mdash;
+      the Shortcut on your phone stays exactly the same.
+    </p>
+    <p style="margin:14px 0 0; font-weight:600; color:var(--accent);" id="marker">
+      &#128075; Hello from build 1.
+    </p>
+  </div>
+
+  <footer>
+    It opened. That&rsquo;s the whole goal for now.<br />
+    Served from GitHub Pages &middot; edited by Claude &middot; <span id="date"></span>
+  </footer>
+
+  <script>
+    document.getElementById('date').textContent = new Date().toLocaleDateString();
+  </script>
+</body>
+</html>
