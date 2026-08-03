@@ -5,13 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Calorie Tracker" />
+  <meta name="apple-mobile-web-app-title" content="Flex Life" />
   <meta name="theme-color" content="#0b0f17" />
-  <title>Calorie Tracker</title>
+  <title>Flex Life</title>
   <script>
     // Self-update: on open / foreground, check the live build and reload if newer.
     // Uses a cache-busting query so iOS/GitHub CDN can't serve a stale answer.
-    const BUILD = "2";
+    const BUILD = "3";
     async function checkUpdate() {
       try {
         const res = await fetch('version.txt?cb=' + Date.now(), { cache: 'no-store' });
@@ -108,7 +108,7 @@
 </head>
 <body>
   <header>
-    <h1>Calorie Tracker</h1>
+    <h1>Flex Life</h1>
     <p class="date" id="date"></p>
   </header>
 
