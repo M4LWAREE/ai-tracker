@@ -8,9 +8,14 @@
   <meta name="apple-mobile-web-app-title" content="Flex Life" />
   <meta name="theme-color" content="#efe7d6" />
   <title>Flex Life</title>
+
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="favicon.svg" />
+
   <script>
     // Self-update: on open / foreground, check the live build and reload if newer.
-    const BUILD = "5";
+    const BUILD = "7";
     async function checkUpdate() {
       try {
         const res = await fetch('version.txt?cb=' + Date.now(), { cache: 'no-store' });
@@ -46,41 +51,62 @@
       color: var(--ink);
       font-family: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
       -webkit-font-smoothing: antialiased;
-      padding: calc(env(safe-area-inset-top) + 16px) 18px calc(env(safe-area-inset-bottom) + 18px);
+      padding: calc(env(safe-area-inset-top) + 16px) 18px calc(env(safe-area-inset-bottom) + 28px);
       max-width: 520px;
       margin: 0 auto;
       min-height: 100vh;
     }
     .display {
       font-family: "Anton", Impact, "Haettenschweiler", "Arial Narrow", sans-serif;
-      font-weight: 400;
-      letter-spacing: .01em;
-      text-transform: uppercase;
+      font-weight: 400; letter-spacing: .01em; text-transform: uppercase;
     }
     .tag { font-size: 11px; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; }
+    button { font-family: inherit; }
 
     /* Header */
     header { padding: 6px 0; display: flex; align-items: flex-start; justify-content: space-between; }
     .brand { line-height: .92; }
     .brand .display { font-size: 54px; display: block; }
     .brand .life { display: inline-block; background: var(--lime); padding: 1px 9px; margin-top: 4px; }
-    .datebox {
-      text-align: right; border: 2.5px solid var(--ink); background: var(--paper-2);
-      padding: 7px 10px; box-shadow: 3px 3px 0 var(--ink); max-width: 128px;
+    .menu-btn {
+      width: 52px; height: 52px; flex: 0 0 auto; border: 3px solid var(--ink); background: var(--paper-2);
+      box-shadow: var(--shadow); cursor: pointer; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 5px; border-radius: 0;
     }
-    .datebox .tag { display: block; opacity: .6; }
-    .datebox .d { font-weight: 700; font-size: 13px; margin-top: 3px; line-height: 1.15; }
+    .menu-btn span { width: 24px; height: 3px; background: var(--ink); display: block; }
+    .menu-btn:active { transform: translate(3px, 3px); box-shadow: none; }
+
+    /* Date nav */
+    .datenav {
+      display: flex; align-items: stretch; gap: 10px; margin-top: 16px;
+    }
+    .datenav .arrow {
+      width: 46px; border: 2.5px solid var(--ink); background: var(--paper-2); box-shadow: 3px 3px 0 var(--ink);
+      font-size: 22px; font-weight: 700; cursor: pointer; border-radius: 0; line-height: 1;
+    }
+    .datenav .arrow:disabled { opacity: .32; box-shadow: none; cursor: default; }
+    .datenav .arrow:not(:disabled):active { transform: translate(3px, 3px); box-shadow: none; }
+    .datenav .cur {
+      flex: 1; border: 2.5px solid var(--ink); background: var(--ink); color: var(--paper);
+      box-shadow: 3px 3px 0 var(--ink); display: flex; align-items: center; justify-content: center;
+      gap: 10px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; font-size: 14px;
+    }
+    .datenav .today-pill {
+      font-size: 10px; letter-spacing: .12em; background: var(--lime); color: var(--ink);
+      padding: 3px 7px; cursor: pointer; border: none; font-weight: 700;
+    }
 
     /* Hero */
     .hero {
       border: 3px solid var(--ink); background: var(--ink); color: var(--paper);
-      box-shadow: var(--shadow); padding: 20px 20px 22px; margin-top: 16px;
+      box-shadow: var(--shadow); padding: 20px 20px 22px; margin-top: 14px;
     }
     .hero .tag { color: var(--lime); }
     .bignum { display: flex; align-items: baseline; gap: 12px; margin: 2px 0 4px; }
-    .bignum .n { font-size: 88px; line-height: .8; color: var(--lime); }
+    .bignum .n { font-size: clamp(58px, 21vw, 88px); line-height: .8; color: var(--lime); }
     .bignum .u { font-size: 20px; opacity: .85; }
     .sub { font-size: 13px; font-weight: 500; letter-spacing: .04em; opacity: .82; text-transform: uppercase; }
+    .sub.over { color: var(--coral); opacity: 1; font-weight: 700; }
     .bar {
       margin-top: 16px; height: 20px; background: #2c281d;
       border: 2.5px solid var(--paper); position: relative; overflow: hidden;
@@ -88,9 +114,9 @@
     .bar .fill { height: 100%; width: 0; background: var(--lime); transition: width .35s ease; }
 
     /* Stats */
-    .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
-    .stat { border: 2.5px solid var(--ink); background: var(--paper-2); box-shadow: 3px 3px 0 var(--ink); padding: 12px 14px; }
-    .stat .v { font-size: 30px; line-height: 1; }
+    .stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 12px; }
+    .stat { border: 2.5px solid var(--ink); background: var(--paper-2); box-shadow: 3px 3px 0 var(--ink); padding: 11px 12px; }
+    .stat .v { font-size: 26px; line-height: 1; }
     .stat .k { margin-top: 5px; opacity: .6; }
 
     /* Form */
@@ -112,8 +138,7 @@
     button.add:active { transform: translate(3px, 3px); box-shadow: none; }
     .hint {
       display: none; align-self: flex-start; font-size: 12px; font-weight: 700; letter-spacing: .04em;
-      text-transform: uppercase; background: var(--ink); color: var(--lime);
-      padding: 4px 9px; margin-top: -2px;
+      text-transform: uppercase; background: var(--ink); color: var(--lime); padding: 4px 9px; margin-top: -2px;
     }
 
     /* Quick add chips */
@@ -124,32 +149,94 @@
     .chip {
       flex: 0 0 auto; display: flex; align-items: center; gap: 8px; white-space: nowrap;
       border: 2.5px solid var(--ink); background: var(--paper-2); box-shadow: 3px 3px 0 var(--ink);
-      padding: 9px 13px; cursor: pointer; border-radius: 0; font-family: inherit;
+      padding: 9px 13px; cursor: pointer; border-radius: 0;
     }
     .chip .cn { font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: .03em; }
     .chip .ck { font-family: "Anton", Impact, sans-serif; font-size: 16px; }
     .chip:active { transform: translate(3px, 3px); box-shadow: none; background: var(--lime); }
 
-    /* List */
+    /* Still room for — budget-fit suggestions */
+    .room { margin-top: 22px; }
+    .room .tag { opacity: .6; display: block; margin-bottom: 9px; }
+    .roomlist { display: flex; flex-direction: column; gap: 9px; }
+    .roomcard {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px; text-align: left; width: 100%;
+      border: 2.5px solid var(--ink); background: var(--paper-2); box-shadow: 3px 3px 0 var(--ink);
+      padding: 12px 14px; cursor: pointer; border-radius: 0; font-family: inherit; color: var(--ink);
+    }
+    .roomcard:active { transform: translate(3px, 3px); box-shadow: none; background: var(--lime); }
+    .roomcard .rc-foods { font-weight: 700; font-size: 14px; text-transform: uppercase; letter-spacing: .02em; line-height: 1.25; }
+    .roomcard .rc-right { display: flex; align-items: center; gap: 12px; flex: 0 0 auto; }
+    .roomcard .rc-k { font-family: "Anton", Impact, sans-serif; font-size: 20px; }
+    .roomcard .rc-add { width: 26px; height: 26px; display: grid; place-items: center; background: var(--ink); color: var(--lime); font-size: 20px; line-height: 1; }
+    .room .room-note { opacity: .55; font-weight: 500; letter-spacing: .05em; text-transform: uppercase; font-size: 12px; padding: 4px 0; }
+
+    /* Log */
     .listhead { margin-top: 26px; display: flex; align-items: center; gap: 10px; }
     .listhead .line { flex: 1; height: 3px; background: var(--ink); }
-    ul { list-style: none; padding: 0; margin: 10px 0 0; }
+    .meal { margin-top: 18px; }
+    .meal-h { display: flex; align-items: baseline; justify-content: space-between; border-bottom: 3px solid var(--ink); padding-bottom: 5px; }
+    .meal-h .mn { font-size: 13px; }
+    .meal-h .mt { font-family: "Anton", Impact, sans-serif; font-size: 17px; }
+    ul { list-style: none; padding: 0; margin: 0; }
     li {
       display: flex; align-items: center; justify-content: space-between;
-      border-bottom: 2.5px solid var(--ink); padding: 15px 2px;
+      border-bottom: 2px solid rgba(22,19,13,.18); padding: 13px 2px;
     }
-    li .name { font-size: 17px; font-weight: 700; text-transform: uppercase; letter-spacing: .02em; }
+    li .name { font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: .02em; }
     li .right { display: flex; align-items: center; gap: 14px; }
-    li .kcal { font-family: "Anton", Impact, sans-serif; font-size: 20px; }
+    li .kcal { font-family: "Anton", Impact, sans-serif; font-size: 19px; }
     li button.del {
       width: 30px; height: 30px; border: 2.5px solid var(--ink); background: var(--paper);
       color: var(--ink); font-size: 16px; line-height: 1; cursor: pointer; border-radius: 0;
     }
     li button.del:active { background: var(--coral); color: #fff; }
-    .empty { border-bottom: none; opacity: .55; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; font-size: 13px; padding: 22px 0; }
+    .empty { opacity: .55; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; font-size: 13px; padding: 26px 0; text-align: center; }
 
     footer { margin-top: 30px; text-align: center; }
     footer .tag { opacity: .5; }
+
+    /* Menu overlay */
+    .backdrop { position: fixed; inset: 0; background: rgba(22,19,13,.5); opacity: 0; pointer-events: none; transition: opacity .2s; z-index: 40; }
+    .backdrop.open { opacity: 1; pointer-events: auto; }
+    .panel {
+      position: fixed; top: 0; right: 0; height: 100%; width: min(86%, 380px); z-index: 50;
+      background: var(--paper); border-left: 3px solid var(--ink); box-shadow: -8px 0 0 rgba(22,19,13,.15);
+      transform: translateX(100%); transition: transform .25s ease; overflow-y: auto;
+      padding: calc(env(safe-area-inset-top) + 22px) 22px calc(env(safe-area-inset-bottom) + 28px);
+    }
+    .panel.open { transform: translateX(0); }
+    .panel-top { display: flex; align-items: center; justify-content: space-between; }
+    .panel-top .display { font-size: 40px; }
+    .panel .close { width: 42px; height: 42px; border: 2.5px solid var(--ink); background: var(--paper-2); box-shadow: 3px 3px 0 var(--ink); font-size: 20px; cursor: pointer; border-radius: 0; }
+    .panel .close:active { transform: translate(3px,3px); box-shadow: none; }
+    .sect { margin-top: 26px; }
+    .sect > .tag { opacity: .6; display: block; margin-bottom: 10px; }
+    .goal-row { display: flex; gap: 10px; }
+    .goal-row input { flex: 1; }
+    .goal-row .save { background: var(--lime); border: 2.5px solid var(--ink); box-shadow: 3px 3px 0 var(--ink); font-family: "Anton", Impact, sans-serif; font-size: 16px; text-transform: uppercase; padding: 0 16px; cursor: pointer; }
+    .goal-row .save:active { transform: translate(3px,3px); box-shadow: none; }
+    .streakbox { border: 3px solid var(--ink); background: var(--ink); color: var(--paper); box-shadow: var(--shadow); padding: 16px 18px; }
+    .streakbox .num { font-family: "Anton", Impact, sans-serif; font-size: 46px; color: var(--lime); line-height: .9; }
+    .streakbox .lbl { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; opacity: .8; margin-top: 2px; }
+    .danger {
+      width: 100%; border: 2.5px solid var(--ink); background: var(--paper-2); box-shadow: 3px 3px 0 var(--ink);
+      padding: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; cursor: pointer; border-radius: 0;
+    }
+    .danger:active { transform: translate(3px,3px); box-shadow: none; background: var(--coral); color: #fff; }
+    .about { font-size: 12px; line-height: 1.7; opacity: .7; letter-spacing: .03em; }
+    .about b { letter-spacing: .06em; }
+
+    /* Undo toast */
+    .toast {
+      position: fixed; left: 50%; bottom: calc(env(safe-area-inset-bottom) + 20px); transform: translateX(-50%) translateY(140%);
+      z-index: 60; background: var(--ink); color: var(--paper); border: 2.5px solid var(--ink);
+      box-shadow: var(--shadow); display: flex; align-items: center; gap: 16px;
+      padding: 12px 12px 12px 18px; transition: transform .25s ease; max-width: calc(100% - 36px);
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+    .toast .msg { font-size: 13px; font-weight: 600; letter-spacing: .03em; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .toast .undo { background: var(--lime); color: var(--ink); border: none; font-family: "Anton", Impact, sans-serif; font-size: 15px; text-transform: uppercase; padding: 7px 14px; cursor: pointer; }
   </style>
 </head>
 <body>
@@ -158,11 +245,14 @@
       <span class="display">Flex</span>
       <span class="display"><span class="life">Life</span></span>
     </div>
-    <div class="datebox">
-      <span class="tag">Today</span>
-      <div class="d" id="date"></div>
-    </div>
+    <button class="menu-btn" id="menuBtn" aria-label="Menu"><span></span><span></span><span></span></button>
   </header>
+
+  <div class="datenav">
+    <button class="arrow" id="prevDay" aria-label="Previous day">&#8249;</button>
+    <div class="cur"><span id="curDate">Today</span><button class="today-pill" id="todayBtn" style="display:none;">Today</button></div>
+    <button class="arrow" id="nextDay" aria-label="Next day">&#8250;</button>
+  </div>
 
   <section class="hero">
     <span class="tag">Fuel Logged</span>
@@ -170,17 +260,18 @@
       <span class="n display" id="consumed">0</span>
       <span class="u display">Kcal</span>
     </div>
-    <div class="sub"><span id="remaining">2000</span> left of <span id="goal">2000</span> goal</div>
+    <div class="sub" id="sub">2000 left of 2000 goal</div>
     <div class="bar"><div class="fill" id="fill"></div></div>
   </section>
 
   <div class="stats">
-    <div class="stat"><div class="v display" id="goal2">2000</div><div class="k tag">Daily goal</div></div>
-    <div class="stat"><div class="v display" id="count">0</div><div class="k tag">Items logged</div></div>
+    <div class="stat"><div class="v display" id="goal2">2000</div><div class="k tag">Goal</div></div>
+    <div class="stat"><div class="v display" id="count">0</div><div class="k tag">Items</div></div>
+    <div class="stat"><div class="v display" id="streakStat">0</div><div class="k tag">Streak</div></div>
   </div>
 
   <form id="form">
-    <input id="food" type="text" placeholder="What did you eat" autocomplete="off" />
+    <input id="food" type="text" placeholder="e.g. 2 eggs and toast" autocomplete="off" />
     <div class="frow">
       <input id="kcal" type="number" placeholder="kcal" inputmode="numeric" min="0" />
       <button class="add" type="submit">Add</button>
@@ -193,24 +284,75 @@
     <div class="chips" id="chips"></div>
   </div>
 
+  <div class="room" id="room" style="display:none;">
+    <span class="tag" id="roomLabel">Still room for</span>
+    <div class="roomlist" id="roomList"></div>
+  </div>
+
   <div class="listhead">
-    <span class="tag">Today&rsquo;s log</span>
+    <span class="tag" id="logLabel">Today&rsquo;s log</span>
     <span class="line"></span>
   </div>
-  <ul id="list"></ul>
+  <div id="log"></div>
 
   <footer>
     <span class="tag">A Parag Nanday, Dron Prajapati &amp; Manraj (idk last name) project</span>
   </footer>
 
-  <script>
-    const GOAL = 2000;
-    const dayKey = 'ct-' + new Date().toISOString().slice(0, 10);
-    const RECENTS_KEY = 'ct-recents';
-    const $ = (id) => document.getElementById(id);
+  <!-- Menu -->
+  <div class="backdrop" id="backdrop"></div>
+  <aside class="panel" id="panel" aria-hidden="true">
+    <div class="panel-top">
+      <span class="display">Menu</span>
+      <button class="close" id="closeBtn" aria-label="Close">&times;</button>
+    </div>
 
-    let items = JSON.parse(localStorage.getItem(dayKey) || '[]');
-    let recents = JSON.parse(localStorage.getItem(RECENTS_KEY) || 'null');
+    <div class="sect">
+      <span class="tag">Daily Goal (kcal)</span>
+      <div class="goal-row">
+        <input id="goalInput" type="number" inputmode="numeric" min="500" step="50" />
+        <button class="save" id="goalSave">Set</button>
+      </div>
+    </div>
+
+    <div class="sect">
+      <span class="tag">Current Streak</span>
+      <div class="streakbox">
+        <div class="num" id="streakNum">0</div>
+        <div class="lbl" id="streakLbl">days in a row</div>
+      </div>
+    </div>
+
+    <div class="sect">
+      <span class="tag">Data</span>
+      <button class="danger" id="clearDay">Clear this day&rsquo;s log</button>
+    </div>
+
+    <div class="sect">
+      <span class="tag">About</span>
+      <p class="about">
+        <b>FLEX LIFE</b> &middot; Build 7<br />
+        Track fuel with zero friction.<br />
+        A Parag Nanday, Dron Prajapati &amp; Manraj (idk last name) project.
+      </p>
+    </div>
+  </aside>
+
+  <!-- Undo toast -->
+  <div class="toast" id="toast">
+    <span class="msg" id="toastMsg"></span>
+    <button class="undo" id="undoBtn">Undo</button>
+  </div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const MEAL_ORDER = ['Breakfast', 'Lunch', 'Dinner', 'Snack', 'Other'];
+
+    // ---------- state ----------
+    let goal = parseInt(localStorage.getItem('ct-goal'), 10) || 2000;
+    let viewDate = new Date();
+    let items = [];
+    let recents = JSON.parse(localStorage.getItem('ct-recents') || 'null');
     if (!recents) {
       recents = [
         { name: 'Banana', kcal: 105 }, { name: 'Coffee', kcal: 5 },
@@ -220,96 +362,191 @@
       ];
     }
 
-    // Built-in calorie estimates for common foods (typical serving).
+    function dayKey(d) { return 'ct-' + d.toISOString().slice(0, 10); }
+    function isToday(d) { return d.toISOString().slice(0, 10) === new Date().toISOString().slice(0, 10); }
+    function loadDay() { items = JSON.parse(localStorage.getItem(dayKey(viewDate)) || '[]'); }
+    function save() { localStorage.setItem(dayKey(viewDate), JSON.stringify(items)); }
+    function saveRecents() { localStorage.setItem('ct-recents', JSON.stringify(recents)); }
+
+    // ---------- food knowledge ----------
     const FOODS = {
       banana:105, apple:95, orange:62, grapes:104, strawberries:49, blueberries:84,
       watermelon:46, mango:200, pear:101, peach:59, pineapple:82, avocado:240,
-      egg:78, eggs:156, "boiled egg":78, "scrambled eggs":180, "fried egg":90,
-      toast:75, bread:80, bagel:250, croissant:230, pancakes:350, waffle:220,
+      egg:78, eggs:78, "boiled egg":78, "scrambled eggs":180, "fried egg":90,
+      toast:75, bread:80, bagel:250, croissant:230, pancake:117, pancakes:350, waffle:220,
       oatmeal:150, oats:150, cereal:150, granola:200,
       coffee:5, "black coffee":5, latte:120, cappuccino:90, espresso:3, tea:2,
       "orange juice":110, "apple juice":114, milk:103, "almond milk":40,
       soda:140, cola:140, beer:155, wine:125, water:0, lemonade:120, gatorade:80, smoothie:200,
       "chicken breast":165, "grilled chicken":165, "chicken thigh":210, chicken:200,
       salmon:208, tuna:132, shrimp:85, steak:271, "ground beef":250, "pork chop":210,
-      bacon:90, sausage:170, turkey:135,
+      bacon:45, sausage:170, turkey:135,
       rice:205, "brown rice":216, pasta:220, spaghetti:220, quinoa:222, noodles:220,
       potato:163, "mashed potatoes":214, fries:365, "french fries":365, "sweet potato":112,
       salad:150, "caesar salad":300, broccoli:55, carrots:50, spinach:7, corn:132, beans:227,
-      pizza:285, burger:350, cheeseburger:300, "hot dog":290, sandwich:300, burrito:450,
+      pizza:285, "slice pizza":285, burger:350, cheeseburger:300, "hot dog":290, sandwich:300, burrito:450,
       taco:170, sushi:255, ramen:380, "mac and cheese":310, "fried rice":350, nachos:350,
       wrap:350, quesadilla:300, "burrito bowl":500,
       yogurt:150, "greek yogurt":100, cheese:113, "cottage cheese":110, hummus:70,
       almonds:160, "peanut butter":190, cashews:155, walnuts:185, "trail mix":175, peanuts:160,
       chips:150, "potato chips":150, popcorn:90, pretzels:110, crackers:130,
-      chocolate:210, "dark chocolate":170, "chocolate bar":230, cookie:150, cookies:300,
+      chocolate:210, "dark chocolate":170, "chocolate bar":230, cookie:150, cookies:150,
       donut:250, "ice cream":137, brownie:130, "candy bar":250, cake:350, muffin:400,
       "protein shake":160, "protein bar":200, "energy bar":240, "granola bar":120,
       honey:64, jam:56, butter:102, "olive oil":119, mayo:90, ketchup:20
     };
+    const NUM_WORDS = { a:1, an:1, one:1, two:2, three:3, four:4, five:5, six:6, seven:7, eight:8, nine:9, ten:10, half:0.5 };
 
-    function guessKcal(name) {
-      const q = name.trim().toLowerCase();
+    function lookup(q) {
+      q = q.trim().toLowerCase();
       if (!q) return null;
-      if (FOODS[q] != null) return { kcal: FOODS[q] };
-      let best = null;
-      for (const k in FOODS) { if (k.startsWith(q)) { best = k; break; } }
-      if (!best) { for (const k in FOODS) { if (k.includes(q)) { best = k; break; } } }
-      if (!best) { for (const k in FOODS) { if (q.includes(k) && k.length >= 4) { best = k; break; } } }
-      return best ? { kcal: FOODS[best] } : null;
+      if (FOODS[q] != null) return FOODS[q];
+      for (const k in FOODS) { if (k.startsWith(q)) return FOODS[k]; }
+      for (const k in FOODS) { if (k.includes(q)) return FOODS[k]; }
+      for (const k in FOODS) { if (k.length >= 4 && q.includes(k)) return FOODS[k]; }
+      return null;
+    }
+
+    // Parse free text into one or more {name, kcal, matched}. Handles "2 eggs and toast".
+    function parseEntry(text) {
+      const parts = text.split(/\s*(?:,|\band\b|&|\+|\bwith\b)\s*/i).map((s) => s.trim()).filter(Boolean);
+      const out = [];
+      parts.forEach((p) => {
+        let qty = 1;
+        const m = p.match(/^(\d+(?:\.\d+)?)\s+(.*)$/);
+        if (m) { qty = parseFloat(m[1]); p = m[2]; }
+        else {
+          const w = p.split(/\s+/);
+          if (w.length > 1 && NUM_WORDS[w[0].toLowerCase()] != null) { qty = NUM_WORDS[w[0].toLowerCase()]; p = w.slice(1).join(' '); }
+        }
+        p = p.replace(/^(slices?|pieces?|cups?|bowls?|glasses?|servings?)\s+(?:of\s+)?/i, '').trim();
+        const base = lookup(p);
+        const name = qty !== 1 ? (qty + '× ' + titleCase(p)) : titleCase(p);
+        out.push({ name, kcal: base != null ? Math.round(base * qty) : 0, matched: base != null });
+      });
+      return out;
     }
 
     function titleCase(s) {
       return s.replace(/\w\S*/g, (t) => t.charAt(0).toUpperCase() + t.slice(1).toLowerCase());
     }
+    function escapeHtml(s) {
+      return String(s).replace(/[&<>"']/g, (c) => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+    }
+    function mealNow() {
+      const h = new Date().getHours();
+      if (h < 11) return 'Breakfast';
+      if (h < 16) return 'Lunch';
+      if (h < 21) return 'Dinner';
+      return 'Snack';
+    }
 
-    function save() { localStorage.setItem(dayKey, JSON.stringify(items)); }
-    function saveRecents() { localStorage.setItem(RECENTS_KEY, JSON.stringify(recents)); }
+    // ---------- undo ----------
+    let undoSnapshot = null, toastTimer = null;
+    function showToast(msg, snapshot) {
+      undoSnapshot = { key: dayKey(viewDate), items: snapshot };
+      $('toastMsg').textContent = msg;
+      $('toast').classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => $('toast').classList.remove('show'), 5000);
+    }
+    $('undoBtn').addEventListener('click', () => {
+      if (!undoSnapshot) return;
+      if (undoSnapshot.key === dayKey(viewDate)) { items = undoSnapshot.items; save(); renderAll(); }
+      else { localStorage.setItem(undoSnapshot.key, JSON.stringify(undoSnapshot.items)); renderAll(); }
+      $('toast').classList.remove('show');
+      undoSnapshot = null;
+    });
 
+    // ---------- mutations ----------
+    function addEntries(entries) {
+      const snap = items.slice();
+      const meal = isToday(viewDate) ? mealNow() : 'Other';
+      let added = 0;
+      entries.forEach((e) => {
+        if (e.kcal <= 0 && !e.forceKcal) return;
+        items.push({ name: e.name, kcal: e.kcal, meal });
+        pushRecent(e.baseName || e.name, e.kcal);
+        added++;
+      });
+      if (!added) return;
+      save();
+      showToast(added > 1 ? ('Added ' + added + ' items') : ('Added ' + entries[0].name), snap);
+      renderAll();
+    }
     function pushRecent(name, kcal) {
-      recents = recents.filter((r) => r.name.toLowerCase() !== name.toLowerCase());
-      recents.unshift({ name: titleCase(name), kcal });
+      const clean = name.replace(/^\d+(\.\d+)?×\s*/, '');
+      recents = recents.filter((r) => r.name.toLowerCase() !== clean.toLowerCase());
+      recents.unshift({ name: titleCase(clean), kcal });
       recents = recents.slice(0, 12);
       saveRecents();
     }
-
-    function addFood(name, kcal) {
-      items.push({ name: titleCase(name), kcal });
+    function removeItem(it) {
+      const idx = items.indexOf(it);
+      if (idx < 0) return;
+      const snap = items.slice();
+      items.splice(idx, 1);
       save();
-      pushRecent(name, kcal);
-      render();
-      renderChips();
+      showToast('Removed ' + it.name, snap);
+      renderAll();
     }
 
-    function render() {
+    // ---------- streak ----------
+    function computeStreak() {
+      let d = new Date();
+      const has = (dd) => { const a = JSON.parse(localStorage.getItem(dayKey(dd)) || '[]'); return a.length > 0; };
+      if (!has(d)) { d.setDate(d.getDate() - 1); if (!has(d)) return 0; }
+      let n = 0;
+      while (has(d)) { n++; d.setDate(d.getDate() - 1); }
+      return n;
+    }
+
+    // ---------- render ----------
+    function renderHeroAndStats() {
       const total = items.reduce((s, i) => s + i.kcal, 0);
       $('consumed').textContent = total;
-      $('goal').textContent = GOAL;
-      $('goal2').textContent = GOAL;
-      $('remaining').textContent = Math.max(0, GOAL - total);
+      $('goal2').textContent = goal;
+      const remaining = goal - total;
+      const sub = $('sub');
+      if (remaining >= 0) { sub.classList.remove('over'); sub.textContent = remaining + ' left of ' + goal + ' goal'; }
+      else { sub.classList.add('over'); sub.textContent = 'Over by ' + Math.abs(remaining) + ' kcal'; }
       $('count').textContent = items.length;
+      const pct = Math.min(1, total / goal);
+      $('fill').style.width = (pct * 100) + '%';
+      $('fill').style.background = total > goal ? 'var(--coral)' : 'var(--lime)';
+      const st = computeStreak();
+      $('streakStat').textContent = st;
+      $('streakNum').textContent = st;
+      $('streakLbl').textContent = st === 1 ? 'day in a row' : 'days in a row';
+    }
 
-      const pct = Math.min(1, total / GOAL);
-      const fill = $('fill');
-      fill.style.width = (pct * 100) + '%';
-      fill.style.background = total > GOAL ? 'var(--coral)' : 'var(--lime)';
-
-      const list = $('list');
-      list.innerHTML = '';
+    function renderLog() {
+      const log = $('log');
+      log.innerHTML = '';
       if (items.length === 0) {
-        list.innerHTML = '<li class="empty">Nothing logged yet &mdash; add your first fuel</li>';
+        log.innerHTML = '<p class="empty">Nothing logged &mdash; add your first fuel</p>';
         return;
       }
-      items.forEach((it, idx) => {
-        const li = document.createElement('li');
-        li.innerHTML =
-          '<span class="name">' + escapeHtml(it.name) + '</span>' +
-          '<span class="right"><span class="kcal">' + it.kcal + '</span>' +
-          '<button class="del" aria-label="Remove">&times;</button></span>';
-        li.querySelector('.del').addEventListener('click', () => {
-          items.splice(idx, 1); save(); render();
+      const groups = {};
+      items.forEach((it) => { const m = it.meal || 'Other'; (groups[m] = groups[m] || []).push(it); });
+      MEAL_ORDER.forEach((meal) => {
+        const arr = groups[meal];
+        if (!arr || !arr.length) return;
+        const subtotal = arr.reduce((s, i) => s + i.kcal, 0);
+        const sec = document.createElement('div');
+        sec.className = 'meal';
+        sec.innerHTML = '<div class="meal-h"><span class="mn tag">' + meal + '</span><span class="mt">' + subtotal + '</span></div>';
+        const ul = document.createElement('ul');
+        arr.forEach((it) => {
+          const li = document.createElement('li');
+          li.innerHTML = '<span class="name">' + escapeHtml(it.name) + '</span>' +
+            '<span class="right"><span class="kcal">' + it.kcal + '</span>' +
+            '<button class="del" aria-label="Remove">&times;</button></span>';
+          li.querySelector('.del').addEventListener('click', () => removeItem(it));
+          ul.appendChild(li);
         });
-        list.appendChild(li);
+        sec.appendChild(ul);
+        log.appendChild(sec);
       });
     }
 
@@ -318,29 +555,105 @@
       wrap.innerHTML = '';
       recents.forEach((r) => {
         const b = document.createElement('button');
-        b.type = 'button';
-        b.className = 'chip';
+        b.type = 'button'; b.className = 'chip';
         b.innerHTML = '<span class="cn">' + escapeHtml(r.name) + '</span><span class="ck">' + r.kcal + '</span>';
-        b.addEventListener('click', () => addFood(r.name, r.kcal));
+        b.addEventListener('click', () => addEntries([{ name: r.name, baseName: r.name, kcal: r.kcal, matched: true }]));
         wrap.appendChild(b);
       });
     }
 
-    function escapeHtml(s) {
-      return String(s).replace(/[&<>"']/g, (c) => ({
-        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
-      }[c]));
+    function renderDateNav() {
+      const today = isToday(viewDate);
+      $('nextDay').disabled = today;
+      $('todayBtn').style.display = today ? 'none' : 'inline-block';
+      const label = today ? 'Today' : viewDate.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
+      $('curDate').textContent = label;
+      $('logLabel').textContent = today ? "Today’s log" : label + ' log';
     }
 
-    // Smart calorie guessing while typing.
+    // Budget-fit engine: from the user's own foods, assemble real combos that fit
+    // the calories they have left, and log the whole combo in one tap.
+    function isSubset(a, b) { for (const x of a) { if (!b.has(x)) return false; } return true; }
+    function renderRoom() {
+      const total = items.reduce((s, i) => s + i.kcal, 0);
+      const remaining = goal - total;
+      const room = $('room'), list = $('roomList');
+      list.innerHTML = '';
+
+      // pool = the user's own foods (deduped, calorie-bearing)
+      const seen = new Set(), pool = [];
+      recents.forEach((r) => {
+        const key = r.name.toLowerCase();
+        if (r.kcal > 0 && !seen.has(key)) { seen.add(key); pool.push({ name: titleCase(r.name), kcal: r.kcal }); }
+      });
+
+      if (remaining <= 0 || !pool.length) { room.style.display = 'none'; return; }
+      const smallest = Math.min(...pool.map((p) => p.kcal));
+      if (remaining < smallest) {
+        room.style.display = 'block';
+        list.innerHTML = '<div class="room-note">Just ' + remaining + ' kcal left &mdash; dialed in</div>';
+        return;
+      }
+
+      // all combos of 1&ndash;3 foods that fit the remaining budget
+      const scored = [], n = pool.length;
+      for (let i = 0; i < n; i++) {
+        if (pool[i].kcal <= remaining) scored.push({ c: [i], t: pool[i].kcal });
+        for (let j = i + 1; j < n; j++) {
+          const s2 = pool[i].kcal + pool[j].kcal;
+          if (s2 <= remaining) scored.push({ c: [i, j], t: s2 });
+          for (let k = j + 1; k < n; k++) {
+            const s3 = s2 + pool[k].kcal;
+            if (s3 <= remaining) scored.push({ c: [i, j, k], t: s3 });
+          }
+        }
+      }
+      // fullest use of the budget first
+      scored.forEach((x) => { x.fill = x.t / remaining; });
+      scored.sort((a, b) => b.fill - a.fill);
+
+      // one suggestion per size (single / pair / trio), none nested inside another
+      const picked = [];
+      for (const sz of [1, 2, 3]) {
+        for (const cand of scored) {
+          if (cand.c.length !== sz) continue;
+          const setC = new Set(cand.c);
+          if (picked.some((p) => { const sp = new Set(p.c); return isSubset(setC, sp) || isSubset(sp, setC); })) continue;
+          picked.push(cand); break;
+        }
+      }
+      if (!picked.length) { room.style.display = 'none'; return; }
+
+      room.style.display = 'block';
+      picked.forEach((p) => {
+        const foods = p.c.map((x) => pool[x]);
+        const label = foods.map((f) => f.name).join(' + ');
+        const b = document.createElement('button');
+        b.type = 'button'; b.className = 'roomcard';
+        b.innerHTML = '<span class="rc-foods">' + escapeHtml(label) + '</span>' +
+          '<span class="rc-right"><span class="rc-k">' + p.t + '</span><span class="rc-add">+</span></span>';
+        b.addEventListener('click', () => addEntries(foods.map((f) => ({ name: f.name, baseName: f.name, kcal: f.kcal, matched: true }))));
+        list.appendChild(b);
+      });
+    }
+
+    function renderAll() { renderDateNav(); renderHeroAndStats(); renderLog(); renderChips(); renderRoom(); }
+
+    // ---------- smart typing ----------
     const foodEl = $('food'), kcalEl = $('kcal'), hintEl = $('hint');
     let kcalAuto = false;
     foodEl.addEventListener('input', () => {
-      const g = guessKcal(foodEl.value);
-      if (g) {
-        hintEl.textContent = '≈ ' + g.kcal + ' kcal · tap add';
+      const parsed = parseEntry(foodEl.value);
+      const matched = parsed.filter((p) => p.matched);
+      if (matched.length > 1) {
+        const total = matched.reduce((s, p) => s + p.kcal, 0);
         hintEl.style.display = 'inline-block';
-        if (kcalEl.value === '' || kcalAuto) { kcalEl.value = g.kcal; kcalAuto = true; }
+        hintEl.textContent = '≈ ' + total + ' kcal · ' + matched.length + ' items · tap add';
+        if (kcalAuto) { kcalEl.value = ''; kcalAuto = false; }
+      } else if (parsed.length === 1 && parsed[0].matched) {
+        hintEl.style.display = 'inline-block';
+        hintEl.textContent = '≈ ' + parsed[0].kcal + ' kcal · tap add';
+        if (kcalEl.value === '' || kcalAuto) { kcalEl.value = parsed[0].kcal; kcalAuto = true; }
       } else {
         hintEl.style.display = 'none';
         if (kcalAuto) { kcalEl.value = ''; kcalAuto = false; }
@@ -350,22 +663,50 @@
 
     $('form').addEventListener('submit', (e) => {
       e.preventDefault();
-      const name = foodEl.value.trim();
-      const kcal = parseInt(kcalEl.value, 10);
-      if (!name || !kcal || kcal < 0) return;
-      addFood(name, kcal);
-      foodEl.value = '';
-      kcalEl.value = '';
-      hintEl.style.display = 'none';
-      kcalAuto = false;
+      const text = foodEl.value.trim();
+      if (!text) return;
+      const parsed = parseEntry(text);
+      const matched = parsed.filter((p) => p.matched);
+      const manualKcal = parseInt(kcalEl.value, 10);
+
+      if (matched.length > 1) {
+        addEntries(matched.map((p) => ({ name: p.name, baseName: p.name.replace(/^\d+(\.\d+)?×\s*/, ''), kcal: p.kcal, matched: true })));
+      } else if (manualKcal > 0) {
+        addEntries([{ name: titleCase(text), baseName: titleCase(text), kcal: manualKcal, forceKcal: true }]);
+      } else if (parsed.length === 1 && parsed[0].matched) {
+        addEntries([{ name: parsed[0].name, baseName: parsed[0].name, kcal: parsed[0].kcal, matched: true }]);
+      } else {
+        // no calories known and none entered
+        kcalEl.focus();
+        return;
+      }
+      foodEl.value = ''; kcalEl.value = ''; hintEl.style.display = 'none'; kcalAuto = false;
       foodEl.focus();
     });
 
-    $('date').textContent = new Date().toLocaleDateString(undefined, {
-      weekday: 'short', month: 'short', day: 'numeric'
+    // ---------- date nav ----------
+    $('prevDay').addEventListener('click', () => { viewDate.setDate(viewDate.getDate() - 1); loadDay(); renderAll(); });
+    $('nextDay').addEventListener('click', () => { if (isToday(viewDate)) return; viewDate.setDate(viewDate.getDate() + 1); loadDay(); renderAll(); });
+    $('todayBtn').addEventListener('click', () => { viewDate = new Date(); loadDay(); renderAll(); });
+
+    // ---------- menu ----------
+    function openMenu() { $('goalInput').value = goal; $('backdrop').classList.add('open'); $('panel').classList.add('open'); $('panel').setAttribute('aria-hidden', 'false'); }
+    function closeMenu() { $('backdrop').classList.remove('open'); $('panel').classList.remove('open'); $('panel').setAttribute('aria-hidden', 'true'); }
+    $('menuBtn').addEventListener('click', openMenu);
+    $('closeBtn').addEventListener('click', closeMenu);
+    $('backdrop').addEventListener('click', closeMenu);
+    $('goalSave').addEventListener('click', () => {
+      const g = parseInt($('goalInput').value, 10);
+      if (g && g >= 500) { goal = g; localStorage.setItem('ct-goal', String(goal)); renderAll(); closeMenu(); }
     });
-    render();
-    renderChips();
+    $('clearDay').addEventListener('click', () => {
+      if (!items.length) { closeMenu(); return; }
+      if (confirm('Clear all items for this day?')) { const snap = items.slice(); items = []; save(); showToast('Cleared day', snap); renderAll(); closeMenu(); }
+    });
+
+    // ---------- boot ----------
+    loadDay();
+    renderAll();
   </script>
 </body>
 </html>
