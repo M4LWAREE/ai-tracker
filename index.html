@@ -16,6 +16,8 @@
       --text: #eaf0fb;
       --muted: #8ea1c0;
       --accent: #4ade80;
+      --danger: #ff6b6b;
+      --track: #1c2740;
     }
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     html, body { margin: 0; height: 100%; }
@@ -29,66 +31,156 @@
       min-height: 100%;
     }
     header { padding-top: 28px; }
-    .eyebrow { color: var(--muted); font-size: 13px; letter-spacing: .12em; text-transform: uppercase; margin: 0; }
-    h1 { font-size: 30px; margin: 6px 0 0; letter-spacing: -.02em; }
-    .card {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 22px;
-      margin-top: 22px;
+    h1 { font-size: 28px; margin: 0; letter-spacing: -.02em; }
+    .date { color: var(--muted); font-size: 14px; margin: 4px 0 0; }
+
+    .ring-wrap { display: flex; justify-content: center; margin: 26px 0 4px; }
+    .ring { position: relative; width: 200px; height: 200px; }
+    .ring svg { transform: rotate(-90deg); }
+    .ring .center {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
     }
-    .big { font-size: 48px; font-weight: 700; letter-spacing: -.03em; }
-    .big small { font-size: 18px; color: var(--muted); font-weight: 500; }
-    .row { display: flex; justify-content: space-between; align-items: baseline; }
-    .muted { color: var(--muted); }
-    .pill {
-      display: inline-block;
-      background: rgba(74,222,128,.12);
-      color: var(--accent);
-      border: 1px solid rgba(74,222,128,.35);
-      border-radius: 999px;
-      padding: 4px 12px;
-      font-size: 13px;
-      font-weight: 600;
+    .ring .num { font-size: 44px; font-weight: 700; letter-spacing: -.03em; line-height: 1; }
+    .ring .label { color: var(--muted); font-size: 13px; margin-top: 6px; }
+
+    .stats { display: flex; gap: 12px; margin-top: 18px; }
+    .stat {
+      flex: 1; background: var(--card); border: 1px solid var(--line);
+      border-radius: 14px; padding: 14px; text-align: center;
     }
-    footer { margin-top: auto; padding: 24px 0; color: var(--muted); font-size: 13px; text-align: center; }
-    footer code { color: var(--text); background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: 2px 7px; }
+    .stat .v { font-size: 20px; font-weight: 700; }
+    .stat .k { color: var(--muted); font-size: 12px; margin-top: 2px; }
+
+    form {
+      display: flex; gap: 10px; margin-top: 22px;
+    }
+    input {
+      background: var(--card); border: 1px solid var(--line); color: var(--text);
+      border-radius: 12px; padding: 14px; font-size: 16px; width: 100%;
+    }
+    input#food { flex: 2; }
+    input#kcal { flex: 1; min-width: 0; }
+    input::placeholder { color: var(--muted); }
+    input:focus { outline: none; border-color: var(--accent); }
+    button.add {
+      background: var(--accent); color: #06210f; border: none; font-weight: 700;
+      border-radius: 12px; padding: 0 18px; font-size: 22px; cursor: pointer;
+    }
+
+    ul { list-style: none; padding: 0; margin: 18px 0 0; }
+    li {
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--card); border: 1px solid var(--line);
+      border-radius: 12px; padding: 14px 16px; margin-bottom: 10px;
+    }
+    li .name { font-weight: 600; }
+    li .kcal { color: var(--muted); font-size: 14px; }
+    li .right { display: flex; align-items: center; gap: 14px; }
+    li button.del {
+      background: none; border: none; color: var(--danger); font-size: 20px;
+      cursor: pointer; padding: 0; line-height: 1;
+    }
+    .empty { color: var(--muted); text-align: center; padding: 30px 0; }
   </style>
 </head>
 <body>
   <header>
-    <p class="eyebrow">AI Tracker</p>
     <h1>Calorie Tracker</h1>
+    <p class="date" id="date"></p>
   </header>
 
-  <div class="card">
-    <div class="row">
-      <span class="muted">Today</span>
-      <span class="pill" id="build">v0.1</span>
+  <div class="ring-wrap">
+    <div class="ring">
+      <svg width="200" height="200" viewBox="0 0 200 200">
+        <circle cx="100" cy="100" r="88" fill="none" stroke="var(--track)" stroke-width="16" />
+        <circle id="arc" cx="100" cy="100" r="88" fill="none" stroke="var(--accent)"
+                stroke-width="16" stroke-linecap="round"
+                stroke-dasharray="552.9" stroke-dashoffset="552.9" />
+      </svg>
+      <div class="center">
+        <div class="num" id="consumed">0</div>
+        <div class="label">of <span id="goal">2000</span> kcal</div>
+      </div>
     </div>
-    <div class="big" style="margin-top:10px;">0 <small>/ 2000 kcal</small></div>
-    <p class="muted" style="margin:14px 0 0;">This is the starting shell. Logging comes next &mdash; step by step.</p>
   </div>
 
-  <div class="card">
-    <p style="margin:0 0 6px; font-weight:600;">Update test</p>
-    <p class="muted" style="margin:0;">
-      When Claude changes this page and pushes it, the version pill and the line below will change &mdash;
-      the Shortcut on your phone stays exactly the same.
-    </p>
-    <p style="margin:14px 0 0; font-weight:600; color:var(--accent);" id="marker">
-      &#128075; Hello from build 1.
-    </p>
+  <div class="stats">
+    <div class="stat"><div class="v" id="remaining">2000</div><div class="k">Remaining</div></div>
+    <div class="stat"><div class="v" id="count">0</div><div class="k">Items</div></div>
   </div>
 
-  <footer>
-    It opened. That&rsquo;s the whole goal for now.<br />
-    Served from GitHub Pages &middot; edited by Claude &middot; <span id="date"></span>
-  </footer>
+  <form id="form">
+    <input id="food" type="text" placeholder="Food" autocomplete="off" />
+    <input id="kcal" type="number" placeholder="kcal" inputmode="numeric" min="0" />
+    <button class="add" type="submit" aria-label="Add">+</button>
+  </form>
+
+  <ul id="list"></ul>
 
   <script>
-    document.getElementById('date').textContent = new Date().toLocaleDateString();
+    const GOAL = 2000;
+    const CIRC = 2 * Math.PI * 88;
+    const key = 'ct-' + new Date().toISOString().slice(0, 10);
+    let items = JSON.parse(localStorage.getItem(key) || '[]');
+
+    const $ = (id) => document.getElementById(id);
+
+    function save() { localStorage.setItem(key, JSON.stringify(items)); }
+
+    function render() {
+      const total = items.reduce((s, i) => s + i.kcal, 0);
+      $('consumed').textContent = total;
+      $('goal').textContent = GOAL;
+      $('remaining').textContent = Math.max(0, GOAL - total);
+      $('count').textContent = items.length;
+
+      const pct = Math.min(1, total / GOAL);
+      $('arc').style.strokeDashoffset = CIRC * (1 - pct);
+      $('arc').setAttribute('stroke', total > GOAL ? 'var(--danger)' : 'var(--accent)');
+
+      const list = $('list');
+      list.innerHTML = '';
+      if (items.length === 0) {
+        list.innerHTML = '<li class="empty">No food logged yet</li>';
+        return;
+      }
+      items.forEach((it, idx) => {
+        const li = document.createElement('li');
+        li.innerHTML =
+          '<span class="name">' + escapeHtml(it.name) + '</span>' +
+          '<span class="right"><span class="kcal">' + it.kcal + ' kcal</span>' +
+          '<button class="del" aria-label="Remove">&times;</button></span>';
+        li.querySelector('.del').addEventListener('click', () => {
+          items.splice(idx, 1); save(); render();
+        });
+        list.appendChild(li);
+      });
+    }
+
+    function escapeHtml(s) {
+      return s.replace(/[&<>"']/g, (c) => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[c]));
+    }
+
+    $('form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = $('food').value.trim();
+      const kcal = parseInt($('kcal').value, 10);
+      if (!name || !kcal || kcal < 0) return;
+      items.push({ name, kcal });
+      save();
+      $('food').value = '';
+      $('kcal').value = '';
+      $('food').focus();
+      render();
+    });
+
+    $('date').textContent = new Date().toLocaleDateString(undefined, {
+      weekday: 'long', month: 'long', day: 'numeric'
+    });
+    render();
   </script>
 </body>
 </html>
