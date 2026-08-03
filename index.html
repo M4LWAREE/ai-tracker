@@ -10,7 +10,7 @@
   <title>Flex Life</title>
   <script>
     // Self-update: on open / foreground, check the live build and reload if newer.
-    const BUILD = "4";
+    const BUILD = "5";
     async function checkUpdate() {
       try {
         const res = await fetch('version.txt?cb=' + Date.now(), { cache: 'no-store' });
@@ -60,10 +60,10 @@
     .tag { font-size: 11px; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; }
 
     /* Header */
-    header { padding: 26px 0 6px; display: flex; align-items: flex-start; justify-content: space-between; }
-    .brand { line-height: .82; }
-    .brand .display { font-size: 58px; }
-    .brand .life { background: var(--lime); padding: 0 8px; margin-left: -2px; box-decoration-break: clone; }
+    header { padding: 6px 0; display: flex; align-items: flex-start; justify-content: space-between; }
+    .brand { line-height: .92; }
+    .brand .display { font-size: 54px; display: block; }
+    .brand .life { display: inline-block; background: var(--lime); padding: 1px 9px; margin-top: 4px; }
     .datebox {
       text-align: right; border: 2.5px solid var(--ink); background: var(--paper-2);
       padding: 7px 10px; box-shadow: 3px 3px 0 var(--ink); max-width: 128px;
@@ -74,11 +74,11 @@
     /* Hero */
     .hero {
       border: 3px solid var(--ink); background: var(--ink); color: var(--paper);
-      box-shadow: var(--shadow); padding: 20px 20px 22px; margin-top: 18px;
+      box-shadow: var(--shadow); padding: 20px 20px 22px; margin-top: 16px;
     }
     .hero .tag { color: var(--lime); }
     .bignum { display: flex; align-items: baseline; gap: 12px; margin: 2px 0 4px; }
-    .bignum .n { font-size: 92px; line-height: .8; color: var(--lime); }
+    .bignum .n { font-size: 88px; line-height: .8; color: var(--lime); }
     .bignum .u { font-size: 20px; opacity: .85; }
     .sub { font-size: 13px; font-weight: 500; letter-spacing: .04em; opacity: .82; text-transform: uppercase; }
     .bar {
@@ -94,22 +94,41 @@
     .stat .k { margin-top: 5px; opacity: .6; }
 
     /* Form */
-    form { margin-top: 20px; display: grid; grid-template-columns: 1fr; gap: 10px; }
+    form { margin-top: 18px; display: grid; grid-template-columns: 1fr; gap: 10px; }
     .frow { display: flex; gap: 10px; }
     input {
       font-family: inherit; font-size: 16px; font-weight: 500; color: var(--ink);
       background: var(--paper-2); border: 2.5px solid var(--ink); padding: 14px;
       box-shadow: 3px 3px 0 var(--ink); width: 100%; border-radius: 0;
     }
-    input::placeholder { color: rgba(22,19,13,.42); text-transform: uppercase; letter-spacing: .08em; font-size: 13px; }
+    input::placeholder { color: rgba(22,19,13,.42); text-transform: uppercase; letter-spacing: .06em; font-size: 13px; }
     input:focus { outline: none; background: #fff; box-shadow: 3px 3px 0 var(--lime), 0 0 0 2.5px var(--ink); }
-    input#kcal { flex: 0 0 108px; }
+    input#kcal { flex: 0 0 100px; }
     button.add {
       flex: 1; font-family: "Anton", Impact, sans-serif; text-transform: uppercase; letter-spacing: .04em;
       font-size: 22px; color: var(--ink); background: var(--lime); border: 2.5px solid var(--ink);
       box-shadow: 3px 3px 0 var(--ink); cursor: pointer; padding: 12px; border-radius: 0;
     }
     button.add:active { transform: translate(3px, 3px); box-shadow: none; }
+    .hint {
+      display: none; align-self: flex-start; font-size: 12px; font-weight: 700; letter-spacing: .04em;
+      text-transform: uppercase; background: var(--ink); color: var(--lime);
+      padding: 4px 9px; margin-top: -2px;
+    }
+
+    /* Quick add chips */
+    .quick { margin-top: 20px; }
+    .quick .tag { opacity: .6; display: block; margin-bottom: 9px; }
+    .chips { display: flex; gap: 9px; overflow-x: auto; padding-bottom: 4px; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+    .chips::-webkit-scrollbar { display: none; }
+    .chip {
+      flex: 0 0 auto; display: flex; align-items: center; gap: 8px; white-space: nowrap;
+      border: 2.5px solid var(--ink); background: var(--paper-2); box-shadow: 3px 3px 0 var(--ink);
+      padding: 9px 13px; cursor: pointer; border-radius: 0; font-family: inherit;
+    }
+    .chip .cn { font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: .03em; }
+    .chip .ck { font-family: "Anton", Impact, sans-serif; font-size: 16px; }
+    .chip:active { transform: translate(3px, 3px); box-shadow: none; background: var(--lime); }
 
     /* List */
     .listhead { margin-top: 26px; display: flex; align-items: center; gap: 10px; }
@@ -127,7 +146,7 @@
       color: var(--ink); font-size: 16px; line-height: 1; cursor: pointer; border-radius: 0;
     }
     li button.del:active { background: var(--coral); color: #fff; }
-    .empty { border-bottom: none; opacity: .55; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; font-size: 13px; padding: 26px 0; }
+    .empty { border-bottom: none; opacity: .55; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; font-size: 13px; padding: 22px 0; }
 
     footer { margin-top: 30px; text-align: center; }
     footer .tag { opacity: .5; }
@@ -136,8 +155,8 @@
 <body>
   <header>
     <div class="brand">
-      <div class="display">Flex</div>
-      <div class="display"><span class="life">Life</span></div>
+      <span class="display">Flex</span>
+      <span class="display"><span class="life">Life</span></span>
     </div>
     <div class="datebox">
       <span class="tag">Today</span>
@@ -166,7 +185,13 @@
       <input id="kcal" type="number" placeholder="kcal" inputmode="numeric" min="0" />
       <button class="add" type="submit">Add</button>
     </div>
+    <span class="hint" id="hint"></span>
   </form>
+
+  <div class="quick">
+    <span class="tag">Tap to log &mdash; one touch</span>
+    <div class="chips" id="chips"></div>
+  </div>
 
   <div class="listhead">
     <span class="tag">Today&rsquo;s log</span>
@@ -180,11 +205,81 @@
 
   <script>
     const GOAL = 2000;
-    const key = 'ct-' + new Date().toISOString().slice(0, 10);
-    let items = JSON.parse(localStorage.getItem(key) || '[]');
+    const dayKey = 'ct-' + new Date().toISOString().slice(0, 10);
+    const RECENTS_KEY = 'ct-recents';
     const $ = (id) => document.getElementById(id);
 
-    function save() { localStorage.setItem(key, JSON.stringify(items)); }
+    let items = JSON.parse(localStorage.getItem(dayKey) || '[]');
+    let recents = JSON.parse(localStorage.getItem(RECENTS_KEY) || 'null');
+    if (!recents) {
+      recents = [
+        { name: 'Banana', kcal: 105 }, { name: 'Coffee', kcal: 5 },
+        { name: 'Egg', kcal: 78 }, { name: 'Apple', kcal: 95 },
+        { name: 'Greek Yogurt', kcal: 100 }, { name: 'Chicken Breast', kcal: 165 },
+        { name: 'Protein Shake', kcal: 160 }, { name: 'Rice', kcal: 205 }
+      ];
+    }
+
+    // Built-in calorie estimates for common foods (typical serving).
+    const FOODS = {
+      banana:105, apple:95, orange:62, grapes:104, strawberries:49, blueberries:84,
+      watermelon:46, mango:200, pear:101, peach:59, pineapple:82, avocado:240,
+      egg:78, eggs:156, "boiled egg":78, "scrambled eggs":180, "fried egg":90,
+      toast:75, bread:80, bagel:250, croissant:230, pancakes:350, waffle:220,
+      oatmeal:150, oats:150, cereal:150, granola:200,
+      coffee:5, "black coffee":5, latte:120, cappuccino:90, espresso:3, tea:2,
+      "orange juice":110, "apple juice":114, milk:103, "almond milk":40,
+      soda:140, cola:140, beer:155, wine:125, water:0, lemonade:120, gatorade:80, smoothie:200,
+      "chicken breast":165, "grilled chicken":165, "chicken thigh":210, chicken:200,
+      salmon:208, tuna:132, shrimp:85, steak:271, "ground beef":250, "pork chop":210,
+      bacon:90, sausage:170, turkey:135,
+      rice:205, "brown rice":216, pasta:220, spaghetti:220, quinoa:222, noodles:220,
+      potato:163, "mashed potatoes":214, fries:365, "french fries":365, "sweet potato":112,
+      salad:150, "caesar salad":300, broccoli:55, carrots:50, spinach:7, corn:132, beans:227,
+      pizza:285, burger:350, cheeseburger:300, "hot dog":290, sandwich:300, burrito:450,
+      taco:170, sushi:255, ramen:380, "mac and cheese":310, "fried rice":350, nachos:350,
+      wrap:350, quesadilla:300, "burrito bowl":500,
+      yogurt:150, "greek yogurt":100, cheese:113, "cottage cheese":110, hummus:70,
+      almonds:160, "peanut butter":190, cashews:155, walnuts:185, "trail mix":175, peanuts:160,
+      chips:150, "potato chips":150, popcorn:90, pretzels:110, crackers:130,
+      chocolate:210, "dark chocolate":170, "chocolate bar":230, cookie:150, cookies:300,
+      donut:250, "ice cream":137, brownie:130, "candy bar":250, cake:350, muffin:400,
+      "protein shake":160, "protein bar":200, "energy bar":240, "granola bar":120,
+      honey:64, jam:56, butter:102, "olive oil":119, mayo:90, ketchup:20
+    };
+
+    function guessKcal(name) {
+      const q = name.trim().toLowerCase();
+      if (!q) return null;
+      if (FOODS[q] != null) return { kcal: FOODS[q] };
+      let best = null;
+      for (const k in FOODS) { if (k.startsWith(q)) { best = k; break; } }
+      if (!best) { for (const k in FOODS) { if (k.includes(q)) { best = k; break; } } }
+      if (!best) { for (const k in FOODS) { if (q.includes(k) && k.length >= 4) { best = k; break; } } }
+      return best ? { kcal: FOODS[best] } : null;
+    }
+
+    function titleCase(s) {
+      return s.replace(/\w\S*/g, (t) => t.charAt(0).toUpperCase() + t.slice(1).toLowerCase());
+    }
+
+    function save() { localStorage.setItem(dayKey, JSON.stringify(items)); }
+    function saveRecents() { localStorage.setItem(RECENTS_KEY, JSON.stringify(recents)); }
+
+    function pushRecent(name, kcal) {
+      recents = recents.filter((r) => r.name.toLowerCase() !== name.toLowerCase());
+      recents.unshift({ name: titleCase(name), kcal });
+      recents = recents.slice(0, 12);
+      saveRecents();
+    }
+
+    function addFood(name, kcal) {
+      items.push({ name: titleCase(name), kcal });
+      save();
+      pushRecent(name, kcal);
+      render();
+      renderChips();
+    }
 
     function render() {
       const total = items.reduce((s, i) => s + i.kcal, 0);
@@ -218,29 +313,59 @@
       });
     }
 
+    function renderChips() {
+      const wrap = $('chips');
+      wrap.innerHTML = '';
+      recents.forEach((r) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'chip';
+        b.innerHTML = '<span class="cn">' + escapeHtml(r.name) + '</span><span class="ck">' + r.kcal + '</span>';
+        b.addEventListener('click', () => addFood(r.name, r.kcal));
+        wrap.appendChild(b);
+      });
+    }
+
     function escapeHtml(s) {
-      return s.replace(/[&<>"']/g, (c) => ({
+      return String(s).replace(/[&<>"']/g, (c) => ({
         '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
       }[c]));
     }
 
+    // Smart calorie guessing while typing.
+    const foodEl = $('food'), kcalEl = $('kcal'), hintEl = $('hint');
+    let kcalAuto = false;
+    foodEl.addEventListener('input', () => {
+      const g = guessKcal(foodEl.value);
+      if (g) {
+        hintEl.textContent = '≈ ' + g.kcal + ' kcal · tap add';
+        hintEl.style.display = 'inline-block';
+        if (kcalEl.value === '' || kcalAuto) { kcalEl.value = g.kcal; kcalAuto = true; }
+      } else {
+        hintEl.style.display = 'none';
+        if (kcalAuto) { kcalEl.value = ''; kcalAuto = false; }
+      }
+    });
+    kcalEl.addEventListener('input', () => { kcalAuto = false; });
+
     $('form').addEventListener('submit', (e) => {
       e.preventDefault();
-      const name = $('food').value.trim();
-      const kcal = parseInt($('kcal').value, 10);
+      const name = foodEl.value.trim();
+      const kcal = parseInt(kcalEl.value, 10);
       if (!name || !kcal || kcal < 0) return;
-      items.push({ name, kcal });
-      save();
-      $('food').value = '';
-      $('kcal').value = '';
-      $('food').focus();
-      render();
+      addFood(name, kcal);
+      foodEl.value = '';
+      kcalEl.value = '';
+      hintEl.style.display = 'none';
+      kcalAuto = false;
+      foodEl.focus();
     });
 
     $('date').textContent = new Date().toLocaleDateString(undefined, {
       weekday: 'short', month: 'short', day: 'numeric'
     });
     render();
+    renderChips();
   </script>
 </body>
 </html>
